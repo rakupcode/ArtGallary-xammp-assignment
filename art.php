@@ -19,13 +19,16 @@
             echo "<script>alert('title already exists');</script>";
         }
         else{
-            $artist_result = mysqli_query($con,"select * from artist where artist_name='$artist_name'");
+            $artist_result = mysqli_query($con,"select artist_id from artist where artist_name='$artist_name'");
+
             $artist_row = mysqli_num_rows($artist_result);
-            if($artist_row>0){
+            if($artist_row == 1){
+                $artist = $artist_result->fetch_assoc();
+                $artist_id = $artist["artist_id"];
                 $group_result = mysqli_query($con,"select * from groups where group_name='$group'");
                 $group_row =  mysqli_num_rows($group_result);
                 if($group_row>0){
-                    $msg=mysqli_query($con,"insert into artwork(title,artist_name,creation_date,type,group_name,price,bought_on) values('$title','$artist_name','$creation_date',$type,'$group','$price','$bought_on')");
+                    $msg=mysqli_query($con,"insert into artwork(artist_id,title,creation_date,type,group_name,price,bought_on) values('$artist_id','$title','$creation_date','$type','$group','$price','$bought_on')");
                     if($msg){
                         echo "<script>alert('Registered successfully');</script>";
                     }
